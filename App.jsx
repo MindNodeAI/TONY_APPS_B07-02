@@ -6,7 +6,7 @@ import {
 
 // --- TONY 老師，請務必確認這行網址是正確的 ---
 // 👇 請將您 n8n 的 Test URL 貼在這裡 (引號內)
-const N8N_WEBHOOK_URL = "https://mindnodeai.app.n8n.cloud/webhook-test/generate-sora"; 
+const N8N_WEBHOOK_URL = "https://mindnodeai.app.n8n.cloud/webhook/generate-sora"; 
 
 
 // --- 品牌核心元素 ---
