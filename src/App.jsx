@@ -340,8 +340,12 @@ const THEME_VARIABLES = {
 
 
 // --- 應用程式主組件 ---
-export default function App() {
-  const [selectedPillar, setSelectedPillar] = useState(TONY_STUDIO_PILLARS[0].id);
+export default function App()
+ // 👇 請把這行貼上去，並把引號裡的網址換成您 n8n 的 Test URL
+  const N8N_WEBHOOK_URL = "https://mindnodeai.app.n8n.cloud/webhook-test/generate-sora";{
+  const [selectedPillar, setSelectedPillar] = useState
+  // 👇 請把下面這行貼進去，並把引號裡的網址換成您 n8n 的 Test URL
+const N8N_WEBHOOK_URL = "https://mindnodeai.app.n8n.cloud/webhook-test/generate-sora";(TONY_STUDIO_PILLARS[0].id);
   
   // V3.0: 新增 state
   const [availableThemes, setAvailableThemes] = useState([]);
@@ -386,21 +390,33 @@ export default function App() {
   /**
    * 處理 API 呼叫的重試邏輯
    */
-  async function fetchWithRetry(apiUrl, payload, retries = 3, delay = 1000) {
-    for (let i = 0; i < retries; i++) {
-      try {
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (response.ok) return response.json();
-      } catch (e) {
-        if (i === retries - 1) throw e;
-      }
-      await new Promise(res => setTimeout(res, delay * Math.pow(2, i)));
+  async function handleGenerateClick() {
+    setLoading(true); // 開始轉圈圈
+    
+    try {
+      // 👇 這裡改成「打電話給 n8n」
+      const response = await fetch(N8N_OR_MAKE_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          // 這裡把您畫面上的變數傳過去
+          userPrompt: prompt, 
+          styleChoice: selectedStyle 
+        })
+      });
+
+      const data = await response.json(); // 收到 n8n 回傳的結果
+      
+      // 👇 這裡更新您的畫面 (請依照您原本的變數名稱修改)
+      // 假設 n8n 回傳的是 { result: "生成的腳本內容..." }
+      setGeneratedContent(data.result); 
+
+    } catch (error) {
+      console.error("連線失敗:", error);
+      alert("連線失敗，請檢查 n8n 是否有啟動");
     }
-    throw new Error('API request failed after multiple retries.');
+    
+    setLoading(false); // 停止轉圈圈
   }
   
   /**
