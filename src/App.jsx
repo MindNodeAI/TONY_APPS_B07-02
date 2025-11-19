@@ -6,7 +6,7 @@ import {
 
 // --- TONY 老師，請務必確認這行網址是正確的 ---
 // 👇 請將您 n8n 的 Test URL 貼在這裡 (引號內)
-const N8N_WEBHOOK_URL = "https://您的-n8n-webhook-網址..."; 
+const N8N_WEBHOOK_URL = "https://mindnodeai.app.n8n.cloud/webhook-test/generate-sora"; 
 
 
 // --- 品牌核心元素 ---
@@ -104,8 +104,9 @@ export default function App() {
   }, [selectedPillar]);
 
 
-  // --- ✅ 核心：呼叫 n8n Webhook ---
+  // --- ✅ 核心修正：寬容檢查機制 ---
   const handleGenerateScript = async () => {
+    // ✅ 只有這一行是必填的，其他的我們可以幫他填預設值
     if (!themeInput) {
       setError('請至少填寫「創作主題」。');
       return;
@@ -125,6 +126,7 @@ export default function App() {
         body: JSON.stringify({
           pillar: pillarName,
           theme: themeInput,
+          // ✅ 如果沒填，就傳送 "AI 自動決定" 給後端，這樣就不會報錯了
           character: secondCharacter || "AI 自動決定",
           setting: settingInput || "AI 自動決定"
         })
@@ -253,14 +255,14 @@ export default function App() {
 
           {/* 4. 輸入第二角色 */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2"><User className="w-4 h-4 inline-block mr-2" />4. 第二角色 (手動輸入)</label>
-            <textarea value={secondCharacter} onChange={(e) => setSecondCharacter(e.target.value)} className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white" placeholder="請輸入第二角色 (例如：一位智者)..." rows={2} />
+            <label className="block text-sm font-medium text-gray-300 mb-2"><User className="w-4 h-4 inline-block mr-2" />4. 第二角色 (非必填)</label>
+            <textarea value={secondCharacter} onChange={(e) => setSecondCharacter(e.target.value)} className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white" placeholder="AI 自動建議暫時關閉，請手動輸入，或留空讓後端生成..." rows={2} />
           </div>
 
           {/* 5. 輸入場景 */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2"><Mountain className="w-4 h-4 inline-block mr-2" />5. 場景 (手動輸入)</label>
-            <textarea value={settingInput} onChange={(e) => setSettingInput(e.target.value)} className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white" placeholder="請輸入場景 (例如：竹林)..." rows={2} />
+            <label className="block text-sm font-medium text-gray-300 mb-2"><Mountain className="w-4 h-4 inline-block mr-2" />5. 場景 (非必填)</label>
+            <textarea value={settingInput} onChange={(e) => setSettingInput(e.target.value)} className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white" placeholder="AI 自動建議暫時關閉，請手動輸入，或留空讓後端生成..." rows={2} />
           </div>
 
           {/* 6. 生成按鈕 */}
